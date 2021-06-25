@@ -6,7 +6,11 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import static io.restassured.RestAssured.given;
+
 import org.junit.Assert;
+
+import java.util.Arrays;
 
 public class PostSteps {
 
@@ -26,7 +30,17 @@ public class PostSteps {
     public void i_create_a_Post() {
         PostApiClient postApiClient = new PostApiClient();
         response = postApiClient.createPost(post);
+//
+//        response =  given().log().all()
+//                .contentType("application/json; charset=utf-8")
+//                .body(post)
+//                .when()
+//                .post("http://jsonplaceholder.typicode.com/posts")
+//                .then()
+//                .extract().response();
     }
+
+
 
 
     @Then("Post should be created")
@@ -37,6 +51,24 @@ public class PostSteps {
         Assert.assertEquals(post.getUserId(), actualPost.getUserId());
         Assert.assertEquals(post.getTitle(), actualPost.getTitle());
         Assert.assertEquals(post.getBody(), actualPost.getBody());
+    }
+
+
+    @When("I request details of all Posts")
+    public void i_request_details_of_a_Post() {
+        PostApiClient postApiClient = new PostApiClient();
+        response = postApiClient.getPosts();
+
+    }
+
+
+    @Then("the details of all Posts should be returned")
+    public void post_details_should_be_returned() {
+        int actualStatusCode = response.getStatusCode();
+        Assert.assertEquals(201, actualStatusCode);
+        Post[] postArray = response.as(Post[].class);
+//        Arrays.stream(postArray).forEach(System.out::println);
+        Assert.assertTrue(postArray.length > 0);
     }
 }
 
