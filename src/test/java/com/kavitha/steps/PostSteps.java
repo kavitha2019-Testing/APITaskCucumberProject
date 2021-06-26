@@ -40,9 +40,6 @@ public class PostSteps {
 //                .extract().response();
     }
 
-
-
-
     @Then("Post should be created")
     public void post_should_be_created() {
         int actualStatusCode = response.getStatusCode();
@@ -61,11 +58,10 @@ public class PostSteps {
 
     }
 
-
     @Then("the details of all Posts should be returned")
     public void post_details_should_be_returned() {
         int actualStatusCode = response.getStatusCode();
-        Assert.assertEquals(201, actualStatusCode);
+        Assert.assertEquals(200, actualStatusCode);
         Post[] postArray = response.as(Post[].class);
 //        Arrays.stream(postArray).forEach(System.out::println);
         Assert.assertTrue(postArray.length > 0);
